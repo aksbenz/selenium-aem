@@ -20,8 +20,8 @@ public class Locator {
     }
     protected Locator(){}
 
-    public WebElement element(){return WD.get().d.findElement(locatorType.by(locatorValue));}
-    public List<WebElement> elements(){ return WD.get().d.findElements(locatorType.by(locatorValue));}
+    public WebElement element(){return WD.get().d.findElement(by());}
+    public List<WebElement> elements(){ return WD.get().d.findElements(by());}
 
     /***
      * Gets the Webdriver BY object based on Path Type
@@ -36,24 +36,17 @@ public class Locator {
      * @return Locator String
      */
     public String locator(){ return locatorValue;}
-
-    /**
-     * Sets the Locator String
-     * @param value Locator String value
-     * @return This
-     */
-    public Locator locator(String value){ locatorValue = value; return this;}
-
     /**
      * Gets the Locator Type
      * @return PathType
      */
     public PathType type(){ return locatorType;}
 
-    /**
-     * Updates the Locator Type
-     * @param type PathType to update to
+    /***
+     * Updates the locator values
+     * @param value Locator String
+     * @param type PathType
      * @return This
      */
-    public Locator type(PathType type){ locatorType = type; return this;}
+    public Locator locator(String value, PathType type){locatorValue = value; locatorType = type; return this;}
 }

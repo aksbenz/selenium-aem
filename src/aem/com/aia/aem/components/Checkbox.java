@@ -5,7 +5,7 @@ import com.aia.aem.utils.Locator;
 import org.openqa.selenium.WebElement;
 
 /**
- * Created by aadm221 on 19/10/2017.
+ * Created by AB on 19/10/2017.
  */
 public class Checkbox extends Field<Checkbox>{
     private String label;
@@ -19,14 +19,18 @@ public class Checkbox extends Field<Checkbox>{
         this.label = label;
         elems = new ElemDefs();
     }
+    public Checkbox(String label){
+        super();
+        this.label = label;
+        elems = new ElemDefs();
+    }
+    protected Checkbox(){}
+
     protected Locator getBase(){
         return elems.base;
     }
     protected PathType getBaseType(){
         return PathType.XPATH;
-    }
-    public WebElement element(){
-        return getElement();
     }
 
     public Checkbox check(){

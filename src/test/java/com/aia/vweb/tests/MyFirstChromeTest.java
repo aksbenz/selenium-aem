@@ -33,7 +33,7 @@ public class MyFirstChromeTest {
 
     }
     @Test
-    public void test(){
+    public void insertComponentTest(){
         startWebDriver();
 
         Locator addComponent = new Locator("div[data-path*='content/header/grid/row0/*']",PathType.CSS);
@@ -42,16 +42,15 @@ public class MyFirstChromeTest {
 
         EditableToolbar et = new EditableToolbar();
         et.waitForVisible();
-
-//        List<String> opts = et.getListOfOptions();
         et.optionInsert();
+
         InsertComponentDialog icd = new InsertComponentDialog();
         icd.waitForVisible();
+
         List<String> comps = icd.listComponents();
         icd.selectComponent("AIA COMMONS BOOTSTRAP CONTENT","Image");
-        JOptionPane.showMessageDialog(null, comps, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
-//        String a = "hello india";
 
+        JOptionPane.showMessageDialog(null, comps, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
     }
@@ -83,28 +82,14 @@ public class MyFirstChromeTest {
         startWebDriver();
 
         Locator c1 = new Locator("div[data-path*=':content/header/grid/row0/image']", PathType.CSS);
-//        Locator c2 = new Locator("div[data-path*='content/header/grid/row0/*']",PathType.CSS);
-
         waitFor(c1);
         c1.element().click();
 
         EditableToolbar et = new EditableToolbar();
         et.waitForVisible();
-//        et.settings();
-//        et.delete();
-//
-//        Popup delete = new Popup(d,"Delete");
-//        delete.waitForVisible(10);
-//        delete.cancel();
-////        delete.click("Delete");
-//        delete.waitToClose(10);
-//
-//        d.findElement(c2.by()).click();
-//        d.findElement(c1.by()).click();
-
         et.optionSettings();
         ImageSettings imgSettings = new ImageSettings();
-        imgSettings.form.waitForVisible(10);
+        imgSettings.form.waitForVisible();
         imgSettings.svgTab.gotoTab();
         imgSettings.imageTab.gotoTab();
         imgSettings.imageTab.imageAsset.upload("C:\\tmp\\base.gif");
@@ -123,9 +108,10 @@ public class MyFirstChromeTest {
         startWebDriver();
 
         Editor editor = new Editor();
-        editor.waitForVisible(10);
-//        List<String> dataText = editor.allComponents().stream().map(e -> e.getAttribute("data-path")).collect(Collectors.toList());
-        String dataText = editor.compHavingAttributeValue("data-path","personal_details").getText();
+        editor.waitForVisible();
+        List<String> dataText = editor.allComponents().stream().map(e -> e.getAttribute("data-path")).collect(Collectors.toList());
+        String compText = editor.compHavingAttributeValue("data-path","personal_details").getText();
+
         JOptionPane.showMessageDialog(null, dataText, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
@@ -141,6 +127,7 @@ public class MyFirstChromeTest {
 
         Preview p = new Preview();
         List<String> dataText = p.mainSubSections().stream().map(e -> e.getText()).collect(Collectors.toList());
+
         JOptionPane.showMessageDialog(null, dataText, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
@@ -149,6 +136,7 @@ public class MyFirstChromeTest {
     @Test
     public void navSettingsTest(){
         startWebDriver();
+
         Locator c2 = new Locator("div[data-path*='content/header/grid/row0/nav']",PathType.CSS);
         waitFor(c2);
         c2.element().click();

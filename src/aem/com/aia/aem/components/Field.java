@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Created by aadm221 on 20/10/2017.
+ * Created by AB on 20/10/2017.
  */
 public abstract class Field<T> {
     protected WD wd;
@@ -74,7 +74,7 @@ public abstract class Field<T> {
      * @return This
      */
     public T waitForVisible(int seconds){
-        wd.wait.until((WebDriver dr) -> getElement());
+        wd.wait.until((WebDriver dr) -> getElement().isDisplayed());
         return (T)this;
     }
 
@@ -93,7 +93,6 @@ public abstract class Field<T> {
      */
     public T waitForNotVisible(int seconds){
         Locator base = getBase();
-        wd.wait.until(ExpectedConditions.invisibilityOfElementLocated(getBase().by()));
         wd.wait.until((WebDriver dr)->{
             try {
                 if (parent != null && !parent.isEmpty()) {

@@ -8,11 +8,23 @@ import org.openqa.selenium.support.ui.Select;
  * Created by AADM221 on 30/10/2017.
  */
 public class Dropdown extends Field<Dropdown> {
+    /***
+     * Constructor for Checkbox having a parent
+     * @param parent The Parent Element
+     * @param label Exact Text of checkbox
+     */
     public Dropdown(Locator parent, String label){
         super(parent);
         this.label = label;
         elems = new ElemDefs();
     }
+    public Dropdown(String label){
+        super();
+        this.label = label;
+        elems = new ElemDefs();
+    }
+    protected Dropdown(){}
+
     private String label;
     private ElemDefs elems;
 
