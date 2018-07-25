@@ -10,8 +10,16 @@ import com.aia.aem.utils.WD;
 import com.aia.vweb.ui.ImageSettings;
 import com.aia.vweb.ui.NavSettings;
 import com.aia.vweb.ui.PagePropertiesForm;
+import com.aia.vweb.ui.TextSettings;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.touch.*;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,18 +27,35 @@ import javax.swing.JOptionPane;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class MyFirstChromeTest {
     private WebDriver d;
 
-    private void startWebDriver(){
-        d = new ChromeDriver();
+    private void startWebDriverWithLogs(){
+        DesiredCapabilities caps = DesiredCapabilities.chrome();
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.ALL);
+        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+        logPrefs.enable(LogType.DRIVER, Level.ALL);
+        caps.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        d = new ChromeDriver(caps);
         WD.initialize(d,10);
         d.manage().window().maximize();
         d.navigate().to("http://aaiwkdt021067.aia.biz:4402/editor.html/content/au-aiavitality/en/Test/TestTitle/TestAutomationcomponent.html");
         (new Login()).loginWith("admin","admin");
+//        TouchActions ta = new TouchActions(d);
+    }
 
+    private void startWebDriver(){
+        String url = "http://aaiwkdt021067.aia.biz:4402/editor.html/content/au-aiavitality/en/rewards/virgin-active.html";
+//        String url = "http://aaiwkdt021067.aia.biz:4402/editor.html/content/au-aiavitality/en/Test/TestTitle/TestAutomationcomponent.html";
+        d = new ChromeDriver();
+        d.manage().window().maximize();
+        d.navigate().to(url);
+        WD.initialize(d,10);
+        (new Login()).loginWith("admin","admin");
     }
     @Test
     public void insertComponentTest(){
@@ -50,7 +75,7 @@ public class MyFirstChromeTest {
         List<String> comps = icd.listComponents();
         icd.selectComponent("AIA COMMONS BOOTSTRAP CONTENT","Image");
 
-        JOptionPane.showMessageDialog(null, comps, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(null, comps, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
     }
@@ -72,7 +97,8 @@ public class MyFirstChromeTest {
         pf.mobileTab.shortDescription.value("This is short desecription");
         pf.mobileTab.longDescription.set("This is a long description");
         pf.form.done();
-        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+
+//        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
     }
@@ -98,7 +124,7 @@ public class MyFirstChromeTest {
         imgSettings.imageTab.size.height.value("100");
         imgSettings.form.done();
 
-        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
     }
@@ -112,7 +138,7 @@ public class MyFirstChromeTest {
         List<String> dataText = editor.allComponents().stream().map(e -> e.getAttribute("data-path")).collect(Collectors.toList());
         String compText = editor.compHavingAttributeValue("data-path","personal_details").getText();
 
-        JOptionPane.showMessageDialog(null, dataText, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(null, dataText, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
     }
@@ -128,11 +154,19 @@ public class MyFirstChromeTest {
         Preview p = new Preview();
         List<String> dataText = p.mainSubSections().stream().map(e -> e.getText()).collect(Collectors.toList());
 
-        JOptionPane.showMessageDialog(null, dataText, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(null, dataText, "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
     }
 
+    @Test
+    public void testChromeLogs(){
+        startWebDriverWithLogs();
+        List<LogEntry> logEntries = d.manage().logs().get(LogType.BROWSER).getAll();
+        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+        d.close();
+        d.quit();
+    }
     @Test
     public void navSettingsTest(){
         startWebDriver();
@@ -149,11 +183,29 @@ public class MyFirstChromeTest {
         nv.direction.select("Vertical");
         nv.displayRootOnly.check();
 
-        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
         d.close();
         d.quit();
     }
+    @Test
+    public void textSettingsTest(){
+        startWebDriver();
 
+        Locator c2 = new Locator("div[data-path*='content/main/grid/row0/description']",PathType.CSS);
+        waitFor(c2);
+        c2.element().click();
+
+        EditableToolbar et = new EditableToolbar();
+        et.optionSettings();
+
+        TextSettings tf = new TextSettings();
+        tf.textTab.text.set("Hello this is a new value");
+
+        JOptionPane.showMessageDialog(null, "I am done", "InfoBox: " + "Options", JOptionPane.INFORMATION_MESSAGE);
+
+        d.close();
+        d.quit();
+    }
     public void waitFor(Locator locator){
         (new WebDriverWait(d,10)).until(ExpectedConditions.visibilityOfElementLocated(locator.by()));
     }

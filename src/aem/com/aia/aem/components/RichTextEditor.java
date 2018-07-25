@@ -26,7 +26,7 @@ public class RichTextEditor extends Field<RichTextEditor>{
     private ElemDefs elems;
 
     private class ElemDefs{
-        private Locator base = new Locator("//label[text()='"+ name +"']/..//div[contains(@class,'coral-RichText-editable')]",PathType.XPATH);
+        private Locator base = new Locator("//label[text()='"+ name +"']/../..//div[contains(@class,'coral-RichText-editable')]",PathType.XPATH);
     }
     protected Locator getBase(){
         return elems.base;
